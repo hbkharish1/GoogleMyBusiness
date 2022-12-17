@@ -149,12 +149,12 @@ class GooglePosting:
         # driver.find_element(By.XPATH,'//*[@id="AH1dze"]/div/div/main/div/div/div/div/div/div[1]/div/div[3]/div/div[2]/div/div/div[1]/button/i').click()
         button =driver.find_element(By.CLASS_NAME,'VfPpkd-LgbsSe')
         button.find_element(By.CLASS_NAME,'VfPpkd-kBDsod').click()
-        driver.implicitly_wait(2)
+        # driver.implicitly_wait(2)
         for field in driver.find_elements(By.CLASS_NAME,'VfPpkd-StrnGf-rymPhb-b9t22c'):
             if field.text == kwargs.get('field'):
                 print(kwargs.get('field'))
                 field.click()
-        time.sleep(5)
+        # time.sleep(5)
 
 
 
