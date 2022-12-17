@@ -1,9 +1,12 @@
 import time
 import datetime
-
-
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import Select
+
 from Posting.Google.Google_login import Google
 from selenium import webdriver
 from openpyxl import load_workbook,Workbook
@@ -136,6 +139,23 @@ class GooglePosting:
                 clicked.click()
                 print("Successfully Posted")
 
+    def Recapatcha(self):
+        robot=driver.find_element(By.ID,'recaptcha')
+        driver.switch_to.frame(robot.find_element(By.TAG_NAME,'iframe'))
+        driver.find_element(By.CLASS_NAME,'rc-anchor-checkbox').click()
+        time.sleep(10)
+
+    def post_call(self,**kwargs):
+        # driver.find_element(By.XPATH,'//*[@id="AH1dze"]/div/div/main/div/div/div/div/div/div[1]/div/div[3]/div/div[2]/div/div/div[1]/button/i').click()
+        button =driver.find_element(By.CLASS_NAME,'VfPpkd-LgbsSe')
+        button.find_element(By.CLASS_NAME,'VfPpkd-kBDsod').click()
+        driver.implicitly_wait(2)
+        for field in driver.find_elements(By.CLASS_NAME,'VfPpkd-StrnGf-rymPhb-b9t22c'):
+            if field.text == kwargs.get('field'):
+                print(kwargs.get('field'))
+                field.click()
+        time.sleep(5)
+
 
 
 class GooglePostingRun:
@@ -164,14 +184,20 @@ class GooglePostingRun:
         driver.close()
         driver.quit()
 
+
+
     def posted(self):
+        time.sleep(5)
         gp = GooglePosting()
+        # gp.Recapatcha()
         gp.move_to_frame()
         gp.post_title(title=self.posting.Title)
         gp.image_upload_form()
         gp.image_upload(image=self.posting.Img_file)
         gp.end_date(date=self.posting.End_date)
         gp.post_description(description=self.posting.Description)
+        gp.post_call(field=self.posting.Field)
+        # time.sleep(10)
         gp.post_published()
 
 
